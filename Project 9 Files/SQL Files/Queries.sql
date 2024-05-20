@@ -8,6 +8,7 @@ SELECT
 FROM employees
 JOIN salaries
 ON (employees.emp_no = salaries.emp_no)
+WHERE employees.emp_no IS NOT NULL
 ORDER BY emp_no ASC;
 
 -- 2. List the first name, last name, and hire date for the employees who were hired in 1986.
@@ -18,6 +19,7 @@ SELECT
 	emp_no
 FROM employees
 WHERE EXTRACT(year FROM TO_DATE(hire_date, 'MM/DD/YYYY')) = 1986
+AND hire_date IS NOT NULL
 ORDER BY emp_no ASC
 ;
 -- 3. List the manager of each department along with their department number, department name, employee number, last name, and first name.
@@ -32,6 +34,7 @@ FROM employees
 	ON (employees.emp_no = dept_manager.emp_no)
 		JOIN departments
 		ON (dept_manager.dept_no = departments.dept_no)
+WHERE employees.emp_no IS NOT NULL -- Not sure why this needs to be added since all columns have all their values, however is supposedly required
 ORDER BY emp_no ASC;
 
 -- 4. List the department number for each employee along with that employee’s employee number, last name, first name, and department name.
@@ -46,6 +49,7 @@ FROM employees
 	ON (employees.emp_no = dept_emp.emp_no)
 		JOIN departments
 		ON (dept_emp.dept_no = departments.dept_no)
+WHERE employees.emp_no IS NOT NULL
 ORDER BY emp_no ASC;
 
 -- 5. List the first name, last name, and sex of each employee whose first name is Hercules and whose last name begins with the letter B.
@@ -55,6 +59,7 @@ SELECT
 	sex
 FROM employees
 WHERE first_name = 'Hercules' AND last_name LIKE 'B%'
+AND emp_no IS NOT NULL
 ORDER BY emp_no ASC;
 
 -- 6. List each employee in the Sales department, including their employee number, last name, and first name.
@@ -70,6 +75,7 @@ FROM employees
 		JOIN departments
 		ON (dept_emp.dept_no = departments.dept_no)
 WHERE dept_name = 'Sales'
+	AND employees.emp_no IS NOT NULL
 ORDER BY emp_no ASC;
 
 -- 7. List each employee in the Sales and Development departments, including their employee number, last name, first name, and department name.
@@ -85,10 +91,12 @@ FROM employees
 		ON (dept_emp.dept_no = departments.dept_no)
 WHERE dept_name = 'Sales'
 OR dept_name = 'Development'
+	AND employees.emp_no IS NOT NULL
 ORDER BY emp_no ASC;
 
 -- 8. List the frequency counts, in descending order, of all the employee last names (that is, how many employees share each last name).
 SELECT last_name, COUNT(*) AS frequency
 FROM employees
+	WHERE emp_no IS NOT NULL
 GROUP BY last_name
 ORDER BY frequency DESC;
